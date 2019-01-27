@@ -1,4 +1,5 @@
 // 처음과 시작과 끝을 파악하며 코드를 디자인하라.
+alert('Welcome Game!');
 var word = 'hello';
 
 while (true) {
