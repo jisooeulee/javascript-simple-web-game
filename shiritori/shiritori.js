@@ -37,7 +37,7 @@ form.addEventListener('submit', function callbackFunction(e){
         input.value = '';
         input.focus();
     } else {
-        result.textContent = 'oops...try onemore time!'
+        result.textContent = 'oops...try onemore time!';
         input.value = '';
         input.focus();
     }
