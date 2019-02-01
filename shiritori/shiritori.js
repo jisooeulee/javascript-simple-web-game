@@ -24,6 +24,7 @@ form.append(button);
 var result = document.createElement('div');
 document.body.append(result);
 
+// 이 프로그램에서는 EventListener가 반복문역할을 하고있다. 단, 모든 EventListener가 힝싱 반복문 역할을 하는 것은 아니다.
 form.addEventListener('submit', function callbackFunction(e){
     // form은 enter를 쳐서 submit을 하면 기본적으로 다른 페이지로 넘어가게된다.(새로고침 된다 : form의 기본 동작) 그래서 화면이 새로고침 되는 상황을 막고자 아래의 코드를 넣는 것.
     e.preventDefault();
