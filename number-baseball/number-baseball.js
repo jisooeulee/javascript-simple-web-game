@@ -1,5 +1,6 @@
 var body = document.body;
 
+// この部分はあとで関数化すること
 var numCandidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 var numArray = [];
 
@@ -20,7 +21,7 @@ for(var i = 0 ; i < 4 ; i++) {
     // var num = numCandidate.unshift();
 
     // push() : 마지막에 추가
-    numArray.push(num);
+    numArray.push(choose);
 }
 
 console.log(numArray);
@@ -33,13 +34,41 @@ document.body.append(form);
 
 var input = document.createElement('input');
 input.type = 'number';
+input.maxLength = 4;
 form.append(input);
 
 var button = document.createElement('button');
 button.textContent = 'input!';
 form.append(button);
 
+// 언제실행될지 모르게 떄문에 비동기.(위에서 아래로 절차적으로 실행되지 않는다.)
+form.addEventListener('submit', function callback(e) {
+    e.preventDefault();
 
-form.addEventListener('submit', function callback() {
+    var answer = input.value;
+    console.log(answer);
 
+    if(answer === numArray.join('')) {
+        result.textContent = 'home run!';
+        input.value = '';
+        input.focus();
+
+        var numCandidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        var numArray = [];
+
+        for(var i = 0 ; i < 4 ; i++) {
+            var choose = numCandidate.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
+            numArray.push(choose);
+        }
+    } else {
+        var answerArray = answer.split('');
+        var strike = 0;
+        var ball = 0;
+
+        for (var i = 0 ; i < 3; i += 1) {
+            if (answerArray[i] === numArray[i]) {
+                strike++;
+            }
+        }
+    }
 }); 
