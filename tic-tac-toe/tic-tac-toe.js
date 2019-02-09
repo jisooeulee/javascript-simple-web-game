@@ -58,7 +58,7 @@ var asyncCallback = function (e) {
         }
 
         // 대각선 검사2 (※ 다른 더 좋은 조건은 없을지 생각해보자 !)
-        if (Math.abs(rowLocation - cellLocation === 2)) { // 대각선 검사가 필요한 경우
+        if (Math.abs(rowLocation + cellLocation === 2)) { // 대각선 검사가 필요한 경우
             if (cells[0][2].textContent === turn &&
                 cells[1][1].textContent === turn &&
                 cells[2][0].textContent === turn) {
@@ -82,12 +82,8 @@ var asyncCallback = function (e) {
                     // cellLocation[row][cell].remove();
                 });
             });
-        }
 
-        // 무승부인 경우 | 여기에 else if를 쓰는 건 어떨까? 결과는 같을 것 같은데.. 리팩토링 과정에서 해보자!
-        
-
-        else {
+        } else {
             if (turn === 'X') {
                 turn = 'O';
 
