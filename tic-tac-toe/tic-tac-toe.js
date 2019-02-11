@@ -67,6 +67,24 @@ var asyncCallback = function (e) {
             }
         }
 
+        // 무승부 (Draw)
+        var cellCheck = cell.offsetParent.innerText.replace(/\s/g, '');
+        var cellCheckNum = cellCheck.split('').length;
+        if (cellCheckNum === 9) {
+            //alert('Draw...');
+            result.textContent = 'Draw...';
+
+            // 초기화
+            // forEach : 배열의 반복문
+            cells.forEach(function (row) {
+                row.forEach(function (cell) {
+                    cell.textContent = '';
+
+                    // cellLocation[row][cell].remove();
+                });
+            });
+        }
+
         // 3개가 맞을 경우
         if (allTrue) {
             // alert('User' + turn + ' is winner !');
