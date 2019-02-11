@@ -68,7 +68,7 @@ var asyncCallback = function (e) {
         }
 
         // 무승부 (Draw)
-        var cellCheck = cell.offsetParent.innerText.replace(/\s/g, '');
+        var cellCheck = cell.offsetParent.innerText.replace(/\s/g, ''); // 여러 공백을 단일 공백으르 대체(replace)
         var cellCheckNum = cellCheck.split('').length;
         if (cellCheckNum === 9) {
             //alert('Draw...');
