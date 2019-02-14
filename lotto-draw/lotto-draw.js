@@ -5,7 +5,6 @@ var candidate = Array(45).fill().map(function (value, index) {
     // undefined라는 value(요소)와(fill[index] = index + 1;을 하기 전!) 1~45의 index(인덱스)값이(+1 했기때문) console에 출력된다.
     //console.log(value, index + 1);
 });
-// console.log(map);
 
 // 2. 랜덤하게 섞는다. 섞어서 shuffle배열에 넣는다.
 var shuffle = [];
@@ -23,5 +22,55 @@ var bonus = shuffle[shuffle.length - 1];
 
 // 4. 6개의 숫자를 잘라낸다. shuffle[0]~[5]의 6개의 숫자를 뽑는다. 이미 bonus의 숫자는 뽑혔기 때문에 중복되서 뽑히지 않을 듯!
 // sort(function(p, c) {return p - c; })의 원리 : 오름차순으로 정렬. (p와 c에 들어온 숫자를 뺀 결과가 0보다 크면 배열 내에서 순서를 바꾼다)
-var winningNumbers = shuffle.slice(0, 6).sort(function(p, c) {return p - c; });
+var winningNumbers = shuffle.slice(0, 6).sort(function (p, c) {
+    return p - c;
+});
 console.log('winning numbers', winningNumbers, 'bonus', bonus);
+
+// html tag를 JS로 가져오기
+var resultWindow = document.getElementById('resultWindow');
+
+// 겹치는 부분(중복되는 것)은 함수의 내용으로, 겹치지 않는 것은 매개변수로 넣는다 (num)
+function ballColor(num, resultWindow) {
+    var ball = document.createElement('div');
+    ball.textContent = num;
+    ball.style.display = 'inline-block';
+    ball.style.border = '1px solid black';
+    ball.style.borderRadius = '10px'; // css에서는 border-radius이지만 JS에서는 -를 빼기로 인식하기 때문에 같은 것이라도 borderRadius와 같은 형식으로 표현된다! (다른 것들도!)
+    ball.style.width = '20px';
+    ball.style.height = '20px';
+    ball.style.textAlign = 'center';
+    ball.style.marginRight = '10px';
+    resultWindow.appendChild(ball);
+}
+
+// 비동기 처리를 위함 : 순서대로 실행되는 것이 아닌. (비동기 콜백함수 안에서 처리) | 클로저 개념을 배운 후, 이 부분을 바꿀 것!
+setTimeout(function callback() {
+   ballColor(winningNumbers[0], resultWindow);
+}, 1000); // 밀리초
+
+setTimeout(function callback() {
+    ballColor(winningNumbers[1], resultWindow);
+}, 2000); // 밀리초
+
+setTimeout(function callback() {
+    ballColor(winningNumbers[2], resultWindow);
+}, 3000); // 밀리초
+
+setTimeout(function callback() {
+    ballColor(winningNumbers[3], resultWindow);
+}, 4000); // 밀리초
+
+setTimeout(function callback() {
+    ballColor(winningNumbers[4], resultWindow);
+}, 5000); // 밀리초
+
+setTimeout(function callback() {
+    ballColor(winningNumbers[5], resultWindow);
+}, 6000); // 밀리초
+
+setTimeout(function callback() {
+    // class는 여러개를 가져올수가 있으니까 배열의 첫번째 것을 가져온다는[0]를 붙여줘야 한다
+    var bonusWindow = document.getElementsByClassName('bonusNum')[0];
+    ballColor(bonus, bonusWindow);
+    }, 7000);
