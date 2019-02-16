@@ -28,7 +28,8 @@ var winningNumbers = shuffle.slice(0, 6).sort(function (p, c) {
 console.log('winning numbers', winningNumbers, 'bonus', bonus);
 
 // html tag를 JS로 가져오기
-var resultWindow = document.getElementById('resultWindow');
+// var resultWindow = document.getElementById('resultWindow');
+var resultWindow = document.querySelector('#resultWindow'); // querySelectorAll도 있다 (여러 태그 동시 선택) | 여기서는 #를 써서 id를 통해 찾는다.
 
 // 겹치는 부분(중복되는 것)은 함수의 내용으로, 겹치지 않는 것은 매개변수로 넣는다 (num)
 function ballColor(num, resultWindow) {
@@ -41,6 +42,22 @@ function ballColor(num, resultWindow) {
     ball.style.height = '20px';
     ball.style.textAlign = 'center';
     ball.style.marginRight = '10px';
+    ball.className = 'ballId' + num; // html에서의 class. js에서는 html에서의 class를 className으로 쓴다.
+    var color;
+    if (num <= 10) {
+        color = 'red';
+    } else if (num <= 20) {
+        color = 'orange';
+    } else if (num <= 30) {
+        color = 'Gold';
+    } else if (num <= 40) {
+        color = 'blue';
+    } else {
+        color = 'green';
+    }
+    ball.style.background = color;
+    ball.style.color = 'white';
+    ball.style.fontSize = '15px';
     resultWindow.appendChild(ball);
 }
 
@@ -71,6 +88,7 @@ setTimeout(function callback() {
 
 setTimeout(function callback() {
     // class는 여러개를 가져올수가 있으니까 배열의 첫번째 것을 가져온다는[0]를 붙여줘야 한다
-    var bonusWindow = document.getElementsByClassName('bonusNum')[0];
+    // var bonusWindow = document.getElementsByClassName('bonusNum')[0]; // html에서의 class. js에서는 html에서의 class를 className으로 쓴다.
+    var bonusWindow = document.querySelector('.bonusNum'); // 여기서는 .을 붙여서 class가 bonusNum인 태그를 가져온다.
     ballColor(bonus, bonusWindow);
     }, 7000);
