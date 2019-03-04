@@ -1,3 +1,4 @@
+var tbody = document.querySelector('#table tbody');
 document.querySelector('#exec').addEventListener('click', function () {
     var hor = parseInt(document.querySelector('#hor').value);
     var ver = parseInt(document.querySelector('#ver').value);
@@ -22,7 +23,7 @@ document.querySelector('#exec').addEventListener('click', function () {
 
     // 지뢰 테이블 만들기
     var dataset = [];
-    var tbody = document.querySelector('#table tbody');
+    // var tbody = document.querySelector('#table tbody');
     // 세로인 tr을 먼저 만들어야 그 안에 가로인 td를 만든다. 입력받은 hor, ver 값에 따라 동적으로 tr, td 생성.
     for (var i = 0; i < ver; i++) {
         var arr = [];
@@ -33,15 +34,19 @@ document.querySelector('#exec').addEventListener('click', function () {
             arr.push(1);
             var td = document.createElement('td');
             tr.appendChild(td);
-            td.textContent = 1;
         }
         tbody.appendChild(tr);
     }
     // 지뢰 심기
-    for (var k = 0 ; k < shuffle.length; k++) {
-        var 세로 = Math.floor(shuffle[k] / 10); // tr
-        var 가로 = shuffle[k] % 10; // td
-        tbody.children[세로].children[가로].textContent = 'X'; // 화면
-        dataset[세로][가로] = 'X'; // 우리가 따로 관리하는 2차원 배열
+    for (var k = 0; k < shuffle.length; k++) {
+        var vertical = Math.floor(shuffle[k] / 10); // tr
+        var horizontal = shuffle[k] % 10; // td
+        tbody.children[vertical].children[horizontal].textContent = 'X'; // 화면
+        dataset[vertical][horizontal] = 'X'; // 우리가 따로 관리하는 2차원 배열
     }
+    console.log(dataset);
+});
+
+tbody.querySelector('td').addEventListener('contextmenu', function(){ // contextmenu : 마우스 오른쪽 클릭 이벤트
+
 });
