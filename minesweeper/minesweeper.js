@@ -56,6 +56,32 @@ document.querySelector('#exec').addEventListener('click', function () {
 
                 }
             });
+            td.addEventListener('click', function(e) {
+                // 클릭 했을 때 주변 지뢰 개수
+                var parentTr = e.currentTarget.parentNode;
+                var parentTbody = e.currentTarget.parentNode.parentNode;
+                // 칸과 줄 수를 알아낸다. (blank : 칸, line : 줄)
+                var blank = Array.prototype.indexOf.call(parentTr.children, e.currentTarget); // indexof를 쓰고싶은데 못쓰는 대상들에게 강제로 적용하는 방법(배열이 아닌 것들)
+                var line = Array.prototype.indexOf.call(parentTbody.children, parentTr);
+                if (dataset[line][blank] === 'X') {
+
+                    e.currentTarget.textContent = '💣';
+                } else { // 지뢰가 아닌 경우
+                    var periphery = [ // 주변
+                        dataset[line][blank-1],dataset[line][blank+1]
+                    ];
+                    if (dataset[line-1]) {
+                        periphery = periphery.concat(dataset[line-1][blank-1], dataset[line-1][blank], dataset[line-1][blank+1]); // concat() : 주변을 안바꾸고, 배열과 배열을 합쳐서 '새로운'배열을 만든다.
+                    }
+                    if (dataset[line + 1]) {
+                        periphery = periphery.concat(dataset[line+1][blank-1], dataset[line+1][blank], dataset[line+1][blank+1]);
+                    }
+
+                    e.currentTarget.textContent = periphery.filter(function(v) {
+                       return v === 'X';
+                    }).length;
+                }
+            });
             tr.appendChild(td);
         }
         tbody.appendChild(tr);
@@ -67,7 +93,6 @@ document.querySelector('#exec').addEventListener('click', function () {
         tbody.children[vertical].children[horizontal].textContent = 'X'; // 화면
         dataset[vertical][horizontal] = 'X'; // 우리가 따로 관리하는 2차원 배열
     }
-    console.log(dataset);
 });
 
 
