@@ -1,4 +1,5 @@
 var tbody = document.querySelector('#table tbody');
+var dataset = []; // 지뢰 테이블 만들기
 document.querySelector('#exec').addEventListener('click', function () {
     var hor = parseInt(document.querySelector('#hor').value);
     var ver = parseInt(document.querySelector('#ver').value);
@@ -21,8 +22,6 @@ document.querySelector('#exec').addEventListener('click', function () {
         shuffle.push(randomNums);
     }
 
-    // 지뢰 테이블 만들기
-    var dataset = [];
     // var tbody = document.querySelector('#table tbody');
     // 세로인 tr을 먼저 만들어야 그 안에 가로인 td를 만든다. 입력받은 hor, ver 값에 따라 동적으로 tr, td 생성.
     for (var i = 0; i < ver; i++) {
@@ -32,7 +31,30 @@ document.querySelector('#exec').addEventListener('click', function () {
         for (var j = 0; j < hor; j++) {
             // 입력한 세로(tr)와 가로(td)에 정해진 갯수만큼 1을 넣는다.
             arr.push(1);
-            var td = document.createElement('td');
+            var td = document.createElement('td'); // td를 만들어 내는 순간에 contextmenu이벤트를 설정 (contextmenu : 마우스 오른쪽 클릭 이벤트)
+            td.addEventListener('contextmenu', function (e) {
+                e.preventDefault();
+                var parentTr = e.currentTarget.parentNode;
+                var parentTbody = e.currentTarget.parentNode.parentNode;
+                // 칸과 줄 수를 알아낸다. (blank : 칸, line : 줄)
+                var blank = Array.prototype.indexOf.call(parentTr.children, e.currentTarget); // indexof를 쓰고싶은데 못쓰는 대상들에게 강제로 적용하는 방법(배열이 아닌 것들)
+                var line = Array.prototype.indexOf.call(parentTbody.children, parentTr);
+                console.log(parentTr, parentTbody, e.currentTarget, blank, line);
+
+                if (e.currentTarget.textContent === '' || e.currentTarget.textContent === 'X') {
+                    e.currentTarget.textContent = '!'; // target : 실제 이벤트가 발생한 대상. currentTarget : 이벤트가 걸린 대상. (이벤트를 단 대상)
+                } else if (e.currentTarget.textContent === '!') {
+                    e.currentTarget.textContent = '?';
+                } else if (e.currentTarget.textContent === '?') {
+                    e.currentTarget.textContent = '';
+                    if (dataset[line][blank] === 1) { // 기본칸이면.
+                        e.currentTarget.textContent = '';
+                    } else if (dataset[line][blank] === 'X') {
+                        e.currentTarget.textContent = 'X';
+                    }
+
+                }
+            });
             tr.appendChild(td);
         }
         tbody.appendChild(tr);
@@ -47,6 +69,4 @@ document.querySelector('#exec').addEventListener('click', function () {
     console.log(dataset);
 });
 
-tbody.querySelector('td').addEventListener('contextmenu', function(){ // contextmenu : 마우스 오른쪽 클릭 이벤트
 
-});
