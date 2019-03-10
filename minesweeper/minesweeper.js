@@ -1,6 +1,7 @@
 var tbody = document.querySelector('#table tbody');
 var dataset = []; // 지뢰 테이블 만들기
 document.querySelector('#exec').addEventListener('click', function () {
+    tbody.innerHTML = ''; // tbody의 내부태그들을 다 지워버린다.
     var hor = parseInt(document.querySelector('#hor').value);
     var ver = parseInt(document.querySelector('#ver').value);
     var mine = parseInt(document.querySelector('#mine').value);
