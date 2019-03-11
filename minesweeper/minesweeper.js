@@ -1,5 +1,6 @@
 var tbody = document.querySelector('#table tbody');
 var dataset = []; // 지뢰 테이블 만들기
+
 document.querySelector('#exec').addEventListener('click', function () {
     tbody.innerHTML = ''; // tbody의 내부태그들을 다 지워버린다.
     var hor = parseInt(document.querySelector('#hor').value);
@@ -53,7 +54,6 @@ document.querySelector('#exec').addEventListener('click', function () {
                     } else if (dataset[line][blank] === 'X') {
                         e.currentTarget.textContent = 'X';
                     }
-
                 }
             });
             td.addEventListener('click', function(e) {
@@ -94,5 +94,3 @@ document.querySelector('#exec').addEventListener('click', function () {
         dataset[vertical][horizontal] = 'X'; // 우리가 따로 관리하는 2차원 배열
     }
 });
-
-
