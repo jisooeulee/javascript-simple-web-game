@@ -15,7 +15,6 @@ while (candidate.length > 0) {
     var randomNums = candidate.splice(Math.floor(Math.random() * candidate.length), 1)[0];
     shuffle.push(randomNums);
 }
-// console.log(shuffle);
 
 // 3. 보너스 숫자(7번째 숫자)를 배열의 마지막에서 뽑고, 나머지 숫자들 중에서 6개의 숫자를 뽑는다.
 var bonus = shuffle[shuffle.length - 1];
@@ -61,30 +60,16 @@ function ballColor(num, resultWindow) {
     resultWindow.appendChild(ball);
 }
 
-// 비동기 처리를 위함 : 순서대로 실행되는 것이 아닌. (비동기 콜백함수 안에서 처리) | 클로저 개념을 배운 후, 이 부분을 바꿀 것!
-setTimeout(function callback() {
-   ballColor(winningNumbers[0], resultWindow);
-}, 1000); // 밀리초
+// 비동기 처리 : 순서대로 실행되는 것이 아닌. (비동기 콜백함수 안에서 처리) | closure 개념.
+for (var i = 0; i < winningNumbers.length; i++) {
+    (function closure(j) { // j를 바라도록. j는 function scope를 벗어나지 못한다.
+        setTimeout(function () {
+            ballColor(winningNumbers[j], resultWindow);
+        }, (j + 1) * 1000);
+    })(i); // 즉시 실행 함수. 선언을 하자마자 바로 실행하는.
+}
 
-setTimeout(function callback() {
-    ballColor(winningNumbers[1], resultWindow);
-}, 2000); // 밀리초
 
-setTimeout(function callback() {
-    ballColor(winningNumbers[2], resultWindow);
-}, 3000); // 밀리초
-
-setTimeout(function callback() {
-    ballColor(winningNumbers[3], resultWindow);
-}, 4000); // 밀리초
-
-setTimeout(function callback() {
-    ballColor(winningNumbers[4], resultWindow);
-}, 5000); // 밀리초
-
-setTimeout(function callback() {
-    ballColor(winningNumbers[5], resultWindow);
-}, 6000); // 밀리초
 
 setTimeout(function callback() {
     // class는 여러개를 가져올수가 있으니까 배열의 첫번째 것을 가져온다는[0]를 붙여줘야 한다
