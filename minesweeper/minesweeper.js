@@ -3,6 +3,7 @@ var dataset = []; // 지뢰 테이블 만들기
 
 document.querySelector('#exec').addEventListener('click', function () {
     tbody.innerHTML = ''; // tbody의 내부태그들을 다 지워버린다.
+    dataset = [];
     var hor = parseInt(document.querySelector('#hor').value);
     var ver = parseInt(document.querySelector('#ver').value);
     var mine = parseInt(document.querySelector('#mine').value);
@@ -56,30 +57,61 @@ document.querySelector('#exec').addEventListener('click', function () {
                     }
                 }
             });
-            td.addEventListener('click', function(e) {
-                // 클릭 했을 때 주변 지뢰 개수
+            td.addEventListener('click', function (e) {
                 var parentTr = e.currentTarget.parentNode;
                 var parentTbody = e.currentTarget.parentNode.parentNode;
                 // 칸과 줄 수를 알아낸다. (blank : 칸, line : 줄)
                 var blank = Array.prototype.indexOf.call(parentTr.children, e.currentTarget); // indexof를 쓰고싶은데 못쓰는 대상들에게 강제로 적용하는 방법(배열이 아닌 것들)
                 var line = Array.prototype.indexOf.call(parentTbody.children, parentTr);
+                e.currentTarget.classList.add('opened'); // 태그.classList로 태그의 클래스에 접근, add나 remove로 추가, 삭제.
+                // 클릭 했을 때 주변 지뢰 개수
                 if (dataset[line][blank] === 'X') {
 
                     e.currentTarget.textContent = '💣';
                 } else { // 지뢰가 아닌 경우
                     var periphery = [ // 주변
-                        dataset[line][blank-1],dataset[line][blank+1]
+                        dataset[line][blank - 1], dataset[line][blank + 1]
                     ];
-                    if (dataset[line-1]) {
-                        periphery = periphery.concat(dataset[line-1][blank-1], dataset[line-1][blank], dataset[line-1][blank+1]); // concat() : 주변을 안바꾸고, 배열과 배열을 합쳐서 '새로운'배열을 만든다.
+                    if (dataset[line - 1]) {
+                        periphery = periphery.concat(dataset[line - 1][blank - 1], dataset[line - 1][blank], dataset[line - 1][blank + 1]); // concat() : 주변을 안바꾸고, 배열과 배열을 합쳐서 '새로운'배열을 만든다.
                     }
                     if (dataset[line + 1]) {
-                        periphery = periphery.concat(dataset[line+1][blank-1], dataset[line+1][blank], dataset[line+1][blank+1]);
+                        periphery = periphery.concat(dataset[line + 1][blank - 1], dataset[line + 1][blank], dataset[line + 1][blank + 1]);
                     }
-
-                    e.currentTarget.textContent = periphery.filter(function(v) {
-                       return v === 'X';
+                    // peripheryCount : 주변 지뢰 갯수
+                    var peripheryCount = periphery.filter(function (v) {
+                        return v === 'X';
                     }).length;
+                    e.currentTarget.textContent = peripheryCount;
+                    if (peripheryCount === 0) {
+                        // 주변 8칸 동시 오픈 (재귀 함수 : 반복문을 함수로 표현한다고 생각할 것)
+                        // 주변지뢰개수를 찾는 것처럼 주변칸을 배열로 모으는 코드
+                        var peripheryBlank = []; // 주변칸
+                        if (tbody.children[line - 1]) {
+                            peripheryBlank = peripheryBlank.concat([ // concat은 새로운 배열을 반환해주기 때문에, 변수에 대입해줘야 한다.
+                                tbody.children[line - 1].children[blank - 1],
+                                tbody.children[line - 1].children[blank],
+                                tbody.children[line - 1].children[blank + 1],
+                            ]);
+                        }
+                        peripheryBlank = peripheryBlank.concat([
+                            tbody.children[line].children[blank - 1],
+                            tbody.children[line].children[blank + 1],
+                        ]);
+
+                        if (tbody.children[line + 1]) {
+                            peripheryBlank = peripheryBlank.concat([
+                                tbody.children[line + 1].children[blank - 1],
+                                tbody.children[line + 1].children[blank],
+                                tbody.children[line + 1].children[blank + 1],
+                            ]);
+                        }
+                        peripheryBlank.filter(function (v) {
+                            return !!v;
+                        }).forEach(function (sideBlank) { // sideBlank : 옆칸
+                            sideBlank.click();
+                        });
+                    }
                 }
             });
             tr.appendChild(td);
