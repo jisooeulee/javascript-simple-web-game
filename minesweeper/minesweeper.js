@@ -33,7 +33,9 @@ document.querySelector('#exec').addEventListener('click', function () {
         dataset.push(arr);
         for (var j = 0; j < hor; j++) {
             // 입력한 세로(tr)와 가로(td)에 정해진 갯수만큼 1을 넣는다.
-            arr.push(1);
+            // arr.push(1);
+            arr.push(0);
+
             var td = document.createElement('td'); // td를 만들어 내는 순간에 contextmenu이벤트를 설정 (contextmenu : 마우스 오른쪽 클릭 이벤트)
             td.addEventListener('contextmenu', function (e) {
                 e.preventDefault();
@@ -63,13 +65,13 @@ document.querySelector('#exec').addEventListener('click', function () {
                 // 칸과 줄 수를 알아낸다. (blank : 칸, line : 줄)
                 var blank = Array.prototype.indexOf.call(parentTr.children, e.currentTarget); // indexof를 쓰고싶은데 못쓰는 대상들에게 강제로 적용하는 방법(배열이 아닌 것들)
                 var line = Array.prototype.indexOf.call(parentTbody.children, parentTr);
+                // 클릭 했을 때 (주변 지뢰 개수)
                 e.currentTarget.classList.add('opened'); // 태그.classList로 태그의 클래스에 접근, add나 remove로 추가, 삭제.
-                // 클릭 했을 때 주변 지뢰 개수
-                if (dataset[line][blank] === 'X') {
-
+                if (dataset[line][blank] === 'X') { // 지뢰 클릭
                     e.currentTarget.textContent = '💣';
                 } else { // 지뢰가 아닌 경우
-                    var periphery = [ // 주변
+                    dataset[line][blank] = 1;
+                    var periphery = [ // 주변 지뢰 갯수
                         dataset[line][blank - 1], dataset[line][blank + 1]
                     ];
                     if (dataset[line - 1]) {
@@ -84,6 +86,7 @@ document.querySelector('#exec').addEventListener('click', function () {
                     }).length;
                     e.currentTarget.textContent = peripheryCount;
                     if (peripheryCount === 0) {
+                        console.log('周りを開きます');
                         // 주변 8칸 동시 오픈 (재귀 함수 : 반복문을 함수로 표현한다고 생각할 것)
                         // 주변지뢰개수를 찾는 것처럼 주변칸을 배열로 모으는 코드
                         var peripheryBlank = []; // 주변칸
@@ -107,9 +110,16 @@ document.querySelector('#exec').addEventListener('click', function () {
                             ]);
                         }
                         peripheryBlank.filter(function (v) {
-                            return !!v;
+                            return !!v; // undefined인 주변칸 제거
                         }).forEach(function (sideBlank) { // sideBlank : 옆칸
-                            sideBlank.click();
+                            var parentTr = sideBlank.parentNode;
+                            var parentTbody = sideBlank.parentNode.parentNode;
+                            // 칸과 줄 수를 알아낸다. (blank : 칸, line : 줄)
+                            var sideBlanck_Blank = Array.prototype.indexOf.call(parentTr.children, sideBlank); // 옆칸 칸
+                            var sideBlank_Line = Array.prototype.indexOf.call(parentTbody.children, parentTr); // 옆칸 줄
+                            if(dataset[sideBlanck_Blank][sideBlank_Line] !== 1) {
+                                sideBlank.click();
+                            }
                         });
                     }
                 }
